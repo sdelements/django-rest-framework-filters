@@ -36,7 +36,7 @@ def get_package_data(package):
 
 setup(
     name='djangorestframework-filters',
-    version='0.10.2.post0.fix',
+    version='0.10.2.post0.dev0',
     url='http://github.com/philipn/django-rest-framework-filters',
     license='MIT',
     long_description=README,
