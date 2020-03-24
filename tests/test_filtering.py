@@ -78,6 +78,64 @@ class AutoFilterTests(TestCase):
         f = Subclass(GET, queryset=Note.objects.all())
         self.assertEqual(len(list(f.qs)), 2)
 
+    def test_autofilter_with_method(self):
+        # Test that method param applies to all auto-generated filters.
+        def filter_iexact(qs, field_name, value):
+            # Test that the field name contains the lookup expression.
+            self.assertEqual(field_name, 'content__icontains')
+
+            return qs.filter(**{field_name: value}, author__username="user1")
+
+        class Actual(FilterSet):
+            title = filters.AutoFilter(lookups='__all__', method='filter_title')
+            content = filters.AutoFilter(lookups=['icontains'], method=filter_iexact)
+            author = filters.AutoFilter(lookups='__all__', field_name='author__username', method='filter_author')
+
+            class Meta:
+                model = Note
+                fields = []
+
+            def filter_title(self, qs, field_name, value):
+                return qs.filter(**{field_name: value}, author__username="user1")
+
+            def filter_author(self, qs, field_name, value):
+                return qs.filter(**{field_name: value})
+
+        # Test method as a function
+        GET = {'content__icontains': 'test content'}
+        f = Actual(GET, queryset=Note.objects.all())
+        self.assertEqual(len(list(f.qs)), 3)
+
+        # Test method as a string reference to filterset method
+        GET = {'title__contains': 'Hello'}
+        f = Actual(GET, queryset=Note.objects.all())
+        self.assertEqual(len(list(f.qs)), 1)
+        self.assertEqual(f.qs.first().author.username, "user1")
+
+        GET = {'title__iendswith': '4'}
+        f = Actual(GET, queryset=Note.objects.all())
+        self.assertEqual(len(list(f.qs)), 0)
+
+        GET = {'title': 'Hello Test 4'}
+        f = Actual(GET, queryset=Note.objects.all())
+        self.assertEqual(len(list(f.qs)), 0)
+
+        GET = {'title': 'Hello Test 3'}
+        f = Actual(GET, queryset=Note.objects.all())
+        self.assertEqual(len(list(f.qs)), 1)
+        self.assertEqual(f.qs.first().author.username, "user1")
+
+        # Test method in Autofilter on related field
+        GET = {'author__contains': 'user2'}
+        f = Actual(GET, queryset=Note.objects.all())
+        self.assertEqual(len(list(f.qs)), 1)
+        self.assertEqual(f.qs.first().author.username, "user2")
+
+        GET = {'author': 'user2'}
+        f = Actual(GET, queryset=Note.objects.all())
+        self.assertEqual(len(list(f.qs)), 1)
+        self.assertEqual(f.qs.first().author.username, "user2")
+
 
 class RelatedFilterTests(TestCase):
 
