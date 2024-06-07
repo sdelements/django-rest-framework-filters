@@ -19,3 +19,13 @@ The interface is straightforward::
     set_key_value('foo', 'bar')
     get_value_for_key('foo')
 ```
+
+## Changelog
+
+Changes made in this fork:
+
+- Upgraded to use pyproject.toml
+- Use github actions over travis-ci
+- Python 3.12 compatibilty
+- Django 4.2 compatibilty
+- Removed crispy-forms integration
