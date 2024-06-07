@@ -102,4 +102,4 @@ class RelationshipData:
         )
 
     def verify(self, qs, expected):
-        self.assertQuerysetEqual(qs, expected, attrgetter('pk'), False)
+        self.assertQuerySetEqual(qs, expected, attrgetter('pk'), False)

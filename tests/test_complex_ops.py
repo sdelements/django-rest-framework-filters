@@ -184,7 +184,7 @@ class CombineComplexQuerysetTests(TestCase):
         querysets = [models.User.objects.filter(first_name='Bob')]
         complex_ops = [ComplexOp(None, False, None)]
 
-        self.assertQuerysetEqual(
+        self.assertQuerySetEqual(
             combine_complex_queryset(querysets, complex_ops),
             ['u1', 'u3'], attrgetter('username'), False,
         )
@@ -199,7 +199,7 @@ class CombineComplexQuerysetTests(TestCase):
             ComplexOp(None, False, None),
         ]
 
-        self.assertQuerysetEqual(
+        self.assertQuerySetEqual(
             combine_complex_queryset(querysets, complex_ops),
             ['u1'], attrgetter('username'), False,
         )
@@ -214,7 +214,7 @@ class CombineComplexQuerysetTests(TestCase):
             ComplexOp(None, False, None),
         ]
 
-        self.assertQuerysetEqual(
+        self.assertQuerySetEqual(
             combine_complex_queryset(querysets, complex_ops),
             ['u1', 'u3', 'u4'], attrgetter('username'), False,
         )
@@ -229,7 +229,7 @@ class CombineComplexQuerysetTests(TestCase):
             ComplexOp(None, True, None),
         ]
 
-        self.assertQuerysetEqual(
+        self.assertQuerySetEqual(
             combine_complex_queryset(querysets, complex_ops),
             ['u1'], attrgetter('username'), False,
         )
