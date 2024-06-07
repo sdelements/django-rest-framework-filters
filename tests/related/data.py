@@ -24,82 +24,82 @@ class RelationshipData:
 
     @classmethod
     def setUpTestData(cls):
-        b = Blog.objects.create(pk=1, name='Blog A')
+        b = Blog.objects.create(pk=1, name="Blog A")
         cls.postA(b)
 
-        b = Blog.objects.create(pk=2, name='Blog B')
+        b = Blog.objects.create(pk=2, name="Blog B")
         cls.postB(b)
 
-        b = Blog.objects.create(pk=3, name='Blog C')
+        b = Blog.objects.create(pk=3, name="Blog C")
         cls.postC(b)
 
-        b = Blog.objects.create(pk=4, name='Blog D')
+        b = Blog.objects.create(pk=4, name="Blog D")
         cls.postD(b)
 
-        b = Blog.objects.create(pk=5, name='Blog AB')
+        b = Blog.objects.create(pk=5, name="Blog AB")
         cls.postA(b), cls.postB(b)
 
-        b = Blog.objects.create(pk=6, name='Blog AC')
+        b = Blog.objects.create(pk=6, name="Blog AC")
         cls.postA(b), cls.postC(b)
 
-        b = Blog.objects.create(pk=7, name='Blog AD')
+        b = Blog.objects.create(pk=7, name="Blog AD")
         cls.postA(b), cls.postD(b)
 
-        b = Blog.objects.create(pk=8, name='Blog BC')
+        b = Blog.objects.create(pk=8, name="Blog BC")
         cls.postB(b), cls.postC(b)
 
-        b = Blog.objects.create(pk=9, name='Blog BD')
+        b = Blog.objects.create(pk=9, name="Blog BD")
         cls.postB(b), cls.postD(b)
 
-        b = Blog.objects.create(pk=10, name='Blog CD')
+        b = Blog.objects.create(pk=10, name="Blog CD")
         cls.postC(b), cls.postD(b)
 
-        b = Blog.objects.create(pk=11, name='Blog ABC')
+        b = Blog.objects.create(pk=11, name="Blog ABC")
         cls.postA(b), cls.postB(b), cls.postC(b)
 
-        b = Blog.objects.create(pk=12, name='Blog ABD')
+        b = Blog.objects.create(pk=12, name="Blog ABD")
         cls.postA(b), cls.postB(b), cls.postD(b)
 
-        b = Blog.objects.create(pk=13, name='Blog ACD')
+        b = Blog.objects.create(pk=13, name="Blog ACD")
         cls.postA(b), cls.postC(b), cls.postD(b)
 
-        b = Blog.objects.create(pk=14, name='Blog BCD')
+        b = Blog.objects.create(pk=14, name="Blog BCD")
         cls.postB(b), cls.postC(b), cls.postD(b)
 
-        b = Blog.objects.create(pk=15, name='Blog ABCD')
+        b = Blog.objects.create(pk=15, name="Blog ABCD")
         cls.postA(b), cls.postB(b), cls.postC(b), cls.postD(b)
 
     @classmethod
     def postA(cls, blog):
         Post.objects.create(
             blog=blog,
-            title='Something about Lennon',
-            publish_date='2008-01-01',
+            title="Something about Lennon",
+            publish_date="2008-01-01",
         )
 
     @classmethod
     def postB(cls, blog):
         Post.objects.create(
             blog=blog,
-            title='Something about Lennon',
-            publish_date='2010-01-01',
+            title="Something about Lennon",
+            publish_date="2010-01-01",
         )
 
     @classmethod
     def postC(cls, blog):
         Post.objects.create(
             blog=blog,
-            title='Ringo was a Starr',
-            publish_date='2008-01-01',
+            title="Ringo was a Starr",
+            publish_date="2008-01-01",
         )
 
     @classmethod
     def postD(cls, blog):
         Post.objects.create(
             blog=blog,
-            title='Ringo was a Starr',
-            publish_date='2010-01-01',
+            title="Ringo was a Starr",
+            publish_date="2010-01-01",
         )
 
     def verify(self, qs, expected):
-        self.assertQuerysetEqual(qs, expected, attrgetter('pk'), False)
+        self.assertQuerySetEqual(qs, expected, attrgetter("pk"), False)

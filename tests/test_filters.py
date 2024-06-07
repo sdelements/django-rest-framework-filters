@@ -4,11 +4,11 @@ from rest_framework_filters import FilterSet, filters
 
 
 class A(FilterSet):
-    c = filters.RelatedFilter('tests.test_filters.C')
+    c = filters.RelatedFilter("tests.test_filters.C")
 
 
 class B(FilterSet):
-    a = filters.RelatedFilter('A')
+    a = filters.RelatedFilter("A")
 
 
 class C(FilterSet):
@@ -21,19 +21,19 @@ class RelatedFilterFiltersetTests(TestCase):
     # - Relative `.filterset` imports are durable to inheritance
 
     def subclass(self, cls):
-        return type('Subclass%s' % cls.__name__, (cls, ), {})
+        return type("Subclass%s" % cls.__name__, (cls,), {})
 
     def test_filterset_absolute_import(self):
         for cls in [A, self.subclass(A)]:
             with self.subTest(cls=cls):
-                self.assertIs(cls.base_filters['c'].filterset, C)
+                self.assertIs(cls.base_filters["c"].filterset, C)
 
     def test_filterset_relative_import(self):
         for cls in [B, self.subclass(B)]:
             with self.subTest(cls=cls):
-                self.assertIs(cls.base_filters['a'].filterset, A)
+                self.assertIs(cls.base_filters["a"].filterset, A)
 
     def test_filterset_class(self):
         for cls in [C, self.subclass(C)]:
             with self.subTest(cls=cls):
-                self.assertIs(cls.base_filters['b'].filterset, B)
+                self.assertIs(cls.base_filters["b"].filterset, B)

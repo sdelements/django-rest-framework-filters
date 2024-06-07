@@ -1,4 +1,3 @@
-
 from rest_framework import pagination, viewsets
 
 from rest_framework_filters import backends
@@ -29,7 +28,7 @@ class FilterFieldsUserViewSet(viewsets.ModelViewSet):
     serializer_class = UserSerializer
     filter_backends = [backends.RestFrameworkFilterBackend]
     filterset_fields = {
-        'username': '__all__',
+        "username": "__all__",
     }
 
 
@@ -40,16 +39,16 @@ class UnfilteredUserViewSet(viewsets.ModelViewSet):
 
 
 class ComplexFilterFieldsUserViewSet(FilterFieldsUserViewSet):
-    queryset = User.objects.order_by('pk')
-    filter_backends = (backends.ComplexFilterBackend, )
+    queryset = User.objects.order_by("pk")
+    filter_backends = (backends.ComplexFilterBackend,)
     filterset_fields = {
-        'id': '__all__',
-        'username': '__all__',
-        'email': '__all__',
+        "id": "__all__",
+        "username": "__all__",
+        "email": "__all__",
     }
 
     class pagination_class(pagination.PageNumberPagination):
-        page_size_query_param = 'page_size'
+        page_size_query_param = "page_size"
 
 
 class UserViewSet(viewsets.ModelViewSet):

@@ -12,14 +12,14 @@ from rest_framework_filters.utils import lookahead
 # current iteration: https://regex101.com/r/5rPycz/3
 # special thanks to @JohnDoe2 on the #regex IRC channel!
 # matches groups of "<negate>(<encoded querystring>)<set op>"
-COMPLEX_OP_RE = re.compile(r'()\(([^)]+)\)([^(]*?(?=\())?')
-COMPLEX_OP_NEG_RE = re.compile(r'(~?)\(([^)]+)\)([^(]*?(?=~\(|\())?')
+COMPLEX_OP_RE = re.compile(r"()\(([^)]+)\)([^(]*?(?=\())?")
+COMPLEX_OP_NEG_RE = re.compile(r"(~?)\(([^)]+)\)([^(]*?(?=~\(|\())?")
 COMPLEX_OPERATORS = {
-    '&': QuerySet.__and__,
-    '|': QuerySet.__or__,
+    "&": QuerySet.__and__,
+    "|": QuerySet.__or__,
 }
 
-ComplexOp = namedtuple('ComplexOp', ['querystring', 'negate', 'op'])
+ComplexOp = namedtuple("ComplexOp", ["querystring", "negate", "op"])
 
 
 def decode_complex_ops(encoded_querystring, operators=None, negation=True):
@@ -61,25 +61,27 @@ def decode_complex_ops(encoded_querystring, operators=None, negation=True):
 
     if not matches:
         msg = _("Unable to parse querystring. Decoded: '%(decoded)s'.")
-        raise ValidationError(msg % {'decoded': decoded_querystring})
+        raise ValidationError(msg % {"decoded": decoded_querystring})
 
     results, errors = [], []
     for match, has_next in lookahead(matches):
         negate, querystring, op = match.groups()
 
-        negate = negate == '~'
+        negate = negate == "~"
         querystring = unquote(querystring)
         op_func = operators.get(op.strip()) if op else None
         if op_func is None and has_next:
             msg = _("Invalid querystring operator. Matched: '%(op)s'.")
-            errors.append(msg % {'op': op})
+            errors.append(msg % {"op": op})
 
         results.append(ComplexOp(querystring, negate, op_func))
 
-    msg = _("Ending querystring must not have trailing characters. Matched: '%(chars)s'.")
-    trailing_chars = decoded_querystring[matches[-1].end():]
+    msg = _(
+        "Ending querystring must not have trailing characters. Matched: '%(chars)s'."
+    )
+    trailing_chars = decoded_querystring[matches[-1].end() :]  # noqa: E203
     if trailing_chars:
-        errors.append(msg % {'chars': trailing_chars})
+        errors.append(msg % {"chars": trailing_chars})
 
     if errors:
         raise ValidationError(errors)

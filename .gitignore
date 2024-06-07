@@ -1,62 +1,58 @@
-# Byte-compiled / optimized / DLL files
-__pycache__/
-*.py[cod]
-*$py.class
+*.py[co]
+*.swp
+*.bak
 
-# Distribution / packaging
-.Python
-build/
-develop-eggs/
-dist/
-downloads/
-eggs/
-.eggs/
-lib/
-lib64/
-parts/
-sdist/
-var/
-wheels/
-*.egg-info/
-.installed.cfg
+# docs
+_build
+
+# Packages
 *.egg
-MANIFEST
+*.egg-info
+dist
+build
+eggs
+parts
+bin
+var
+sdist
+develop-eggs
+.installed.cfg
+
+# Installer logs
+pip-log.txt
 
 # Unit test / coverage reports
-htmlcov/
-.tox/
 .coverage
-.coverage.*
-.cache
-nosetests.xml
-coverage.xml
-*.cover
-.hypothesis/
-.pytest_cache/
+.tox
 
-# Translations
+.idea
+
+.DS_Store
+
+#Translations
 *.mo
-*.pot
 
-# Django stuff:
-*.log
-local_settings.py
-db.sqlite3
+#Mr Developer
+.mr.developer.cfg
 
-# Sphinx documentation
-docs/_build/
+# Configuration
+sdelint.cnf
 
-# Jupyter Notebook
-.ipynb_checkpoints
+#generated data
+usecases/output.csv
 
-# pyenv
-.python-version
+# Test files
+info.log
+htmlcov/
 
-# Environments
-.env
-.venv
-env/
-venv/
-ENV/
-env.bak/
-venv.bak/
+#ides
+.idea
+.vscode
+
+#custom cert bundle
+my_root_certs.crt
+
+# symbolic links
+.flake8
+
+conf/

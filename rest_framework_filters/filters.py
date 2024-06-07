@@ -2,11 +2,10 @@ import warnings
 
 from django.utils.module_loading import import_string
 from django_filters.rest_framework.filters import *  # noqa
-from django_filters.rest_framework.filters import (
-    ModelChoiceFilter, ModelMultipleChoiceFilter,
-)
+from django_filters.rest_framework.filters import (ModelChoiceFilter,
+                                                   ModelMultipleChoiceFilter)
 
-ALL_LOOKUPS = '__all__'
+ALL_LOOKUPS = "__all__"
 
 
 class AutoFilter:
@@ -76,7 +75,7 @@ class BaseRelatedFilter:
         Args:
             filterset: The filterset to bind
         """
-        if not hasattr(self, 'bound_filterset'):
+        if not hasattr(self, "bound_filterset"):
             self.bound_filterset = filterset
 
     def filterset():
@@ -87,7 +86,7 @@ class BaseRelatedFilter:
                     self._filterset = import_string(self._filterset)
                 except ImportError:
                     # Fallback to building import path relative to bind class
-                    path = '.'.join([self.bound_filterset.__module__, self._filterset])
+                    path = ".".join([self.bound_filterset.__module__, self._filterset])
                     self._filterset = import_string(path)
             return self._filterset
 
@@ -95,14 +94,16 @@ class BaseRelatedFilter:
             self._filterset = value
 
         return locals()
+
     filterset = property(**filterset())
 
     def get_queryset(self, request):
         queryset = super(BaseRelatedFilter, self).get_queryset(request)
-        assert queryset is not None, \
-            "Expected `.get_queryset()` for related filter '%s.%s' to " \
-            "return a `QuerySet`, but got `None`." \
-            % (self.parent.__class__.__name__, self.field_name)
+        if queryset is None:
+            raise ValueError(
+                "Expected `.get_queryset()` for related filter '%s.%s' to return a `QuerySet`, but got `None`."
+                % (self.parent.__class__.__name__, self.field_name)
+            )
         return queryset
 
 

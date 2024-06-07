@@ -36,12 +36,11 @@ class FilterTests(RelationshipData, TestCase):
 
     def test_single_filter(self):
         # Verify that the following queries are equivalent
-        q1 = Blog.objects.filter(post__title__contains='Lennon')
-        q2 = Blog.objects.filter(post__in=Post.objects
-                                              .filter(title__contains='Lennon'))
-        q3 = Blog.objects.filter(pk__in=Post.objects
-                                            .filter(title__contains='Lennon')
-                                            .values('blog'))
+        q1 = Blog.objects.filter(post__title__contains="Lennon")
+        q2 = Blog.objects.filter(post__in=Post.objects.filter(title__contains="Lennon"))
+        q3 = Blog.objects.filter(
+            pk__in=Post.objects.filter(title__contains="Lennon").values("blog")
+        )
 
         expected = [1, 2, 5, 6, 7, 8, 9, 11, 12, 13, 14, 15]
 
@@ -50,27 +49,26 @@ class FilterTests(RelationshipData, TestCase):
         self.verify(q3, expected)
 
     def test_chained_join_statements(self):
-        q1 = Blog.objects \
-            .filter(post__title__contains='Lennon') \
-            .filter(post__publish_date__year=2008)
+        q1 = Blog.objects.filter(post__title__contains="Lennon").filter(
+            post__publish_date__year=2008
+        )
 
         self.verify(q1.distinct(), self.NOT_CORRECT)
 
     def test_nested_join(self):
         q2 = Blog.objects.filter(
-            post__in=Post.objects
-                         .filter(title__contains='Lennon')
-                         .filter(publish_date__year=2008),
+            post__in=Post.objects.filter(title__contains="Lennon").filter(
+                publish_date__year=2008
+            ),
         )
 
         self.verify(q2, self.CORRECT)
 
     def test_nested_subquery(self):
         q3 = Blog.objects.filter(
-            pk__in=Post.objects
-                       .filter(title__contains='Lennon')
-                       .filter(publish_date__year=2008)
-                       .values('blog'),
+            pk__in=Post.objects.filter(title__contains="Lennon")
+            .filter(publish_date__year=2008)
+            .values("blog"),
         )
 
         self.verify(q3, self.CORRECT)
@@ -78,7 +76,7 @@ class FilterTests(RelationshipData, TestCase):
     # Test behavior
     def test_reverse_fk(self):
         GET = {
-            'post__title__contains': 'Lennon',
-            'post__publish_date__year': '2008',
+            "post__title__contains": "Lennon",
+            "post__publish_date__year": "2008",
         }
         self.verify(BlogFilter(GET).qs, self.CORRECT)
