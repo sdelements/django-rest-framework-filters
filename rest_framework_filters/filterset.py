@@ -17,13 +17,17 @@ def related(filterset, filter_name):
 
 class FilterSetMetaclass(filterset.FilterSetMetaclass):
     def __new__(cls, name, bases, attrs):
-        attrs['auto_filters'] = cls.get_auto_filters(bases, attrs)
+        attrs["auto_filters"] = cls.get_auto_filters(bases, attrs)
 
         new_class = super().__new__(cls, name, bases, attrs)
 
-        new_class.related_filters = OrderedDict([
-            (name, f) for name, f in new_class.declared_filters.items()
-            if isinstance(f, filters.BaseRelatedFilter)])
+        new_class.related_filters = OrderedDict(
+            [
+                (name, f)
+                for name, f in new_class.declared_filters.items()
+                if isinstance(f, filters.BaseRelatedFilter)
+            ]
+        )
 
         # See: :meth:`rest_framework_filters.filters.RelatedFilter.bind`
         for f in new_class.related_filters.values():
@@ -54,17 +58,17 @@ class FilterSetMetaclass(filterset.FilterSetMetaclass):
 
         # Default the `filter.field_name` to the attribute name on the filterset
         for filter_name, f in auto_filters:
-            if getattr(f, 'field_name', None) is None:
+            if getattr(f, "field_name", None) is None:
                 f.field_name = filter_name
 
         auto_filters.sort(key=lambda x: x[1].creation_counter)
 
         # merge auto filters from base classes
         for base in reversed(bases):
-            if hasattr(base, 'auto_filters'):
+            if hasattr(base, "auto_filters"):
                 auto_filters = [
-                    (name, f) for name, f
-                    in base.auto_filters.items()
+                    (name, f)
+                    for name, f in base.auto_filters.items()
                     if name not in attrs
                 ] + auto_filters
 
@@ -108,8 +112,9 @@ class FilterSetMetaclass(filterset.FilterSetMetaclass):
 
                 if gen_f.lookup_expr != "exact":
                     # Update field name to also include lookup expr.
-                    gen_f.field_name = "{field_name}__{lookup_expr}".format(field_name=f.field_name,
-                                                                            lookup_expr=gen_f.lookup_expr)
+                    gen_f.field_name = "{field_name}__{lookup_expr}".format(
+                        field_name=f.field_name, lookup_expr=gen_f.lookup_expr
+                    )
 
             # do not overwrite declared filters
             if gen_name not in orig_declared:
@@ -197,8 +202,9 @@ class FilterSet(rest_framework.FilterSet, metaclass=FilterSetMetaclass):
             This filterset class with subset disabling mixed in.
         """
         if not issubclass(cls, SubsetDisabledMixin):
-            cls = type('SubsetDisabled%s' % cls.__name__,
-                       (SubsetDisabledMixin, cls), {})
+            cls = type(
+                "SubsetDisabled%s" % cls.__name__, (SubsetDisabledMixin, cls), {}
+            )
 
         # recursively disable subset for related filtersets
         if depth > 0:
@@ -254,16 +260,16 @@ class FilterSet(rest_framework.FilterSet, metaclass=FilterSetMetaclass):
             return None
 
         # strip the rel prefix from the param name.
-        prefix = '%s%s' % (rel or '', LOOKUP_SEP)
+        prefix = "%s%s" % (rel or "", LOOKUP_SEP)
         if rel and param.startswith(prefix):
-            param = param[len(prefix):]
+            param = param[len(prefix) :]  # noqa: E203
 
         # Attempt to match against filters with lookups first. (username__endswith)
         if param in cls.base_filters:
             return param
 
         # Attempt to match against exclusion filters
-        if param[-1] == '!' and param[:-1] in cls.base_filters:
+        if param[-1] == "!" and param[:-1] in cls.base_filters:
             return param[:-1]
 
         # Match against relationships. (author__username__endswith).
@@ -288,7 +294,7 @@ class FilterSet(rest_framework.FilterSet, metaclass=FilterSetMetaclass):
             requested_filters[filter_name] = f
 
             # exclusion params
-            exclude_name = '%s!' % filter_name
+            exclude_name = "%s!" % filter_name
             if related(self, exclude_name) in self.data:
                 # deepcopy the *base* filter to prevent copying of model & parent
                 f_copy = copy.deepcopy(self.base_filters[filter_name])
@@ -341,15 +347,15 @@ class FilterSet(rest_framework.FilterSet, metaclass=FilterSetMetaclass):
         """
         for related_name, related_filterset in self.related_filtersets.items():
             # Related filtersets should only be applied if they had data.
-            prefix = '%s%s' % (related(self, related_name), LOOKUP_SEP)
+            prefix = "%s%s" % (related(self, related_name), LOOKUP_SEP)
             if not any(value.startswith(prefix) for value in self.data):
                 continue
 
             field = self.filters[related_name].field
-            to_field_name = getattr(field, 'to_field_name', 'pk') or 'pk'
+            to_field_name = getattr(field, "to_field_name", "pk") or "pk"
 
             field_name = self.filters[related_name].field_name
-            lookup_expr = LOOKUP_SEP.join([field_name, 'in'])
+            lookup_expr = LOOKUP_SEP.join([field_name, "in"])
 
             subquery = related_filterset.qs.values(to_field_name)
             queryset = queryset.filter(**{lookup_expr: subquery})
@@ -376,4 +382,5 @@ class FilterSet(rest_framework.FilterSet, metaclass=FilterSetMetaclass):
                         self.form.errors[related(related_filterset, key)] = error
 
                 return cleaned_data
+
         return Form

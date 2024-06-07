@@ -13,14 +13,19 @@ factory = APIRequestFactory()
 # parse command verbosity level & use for results output
 parser = argparse.ArgumentParser()
 parser.add_argument(
-    '-v', '--verbosity', action='store', dest='verbosity', default=1,
-    type=int, choices=[0, 1, 2, 3],
+    "-v",
+    "--verbosity",
+    action="store",
+    dest="verbosity",
+    default=1,
+    type=int,
+    choices=[0, 1, 2, 3],
 )
 args, _ = parser.parse_known_args()
 verbosity = args.verbosity
 
 
-@tag('perf')
+@tag("perf")
 class PerfTestMixin(object):
     # This mixin provides common setup for testing the performance differences between
     # django-filter and django-rest-framework-filters. A callable for each implementation
@@ -32,13 +37,13 @@ class PerfTestMixin(object):
 
     @classmethod
     def setUpTestData(cls):
-        bob = models.User.objects.create(username='bob')
-        joe = models.User.objects.create(username='joe')
+        bob = models.User.objects.create(username="bob")
+        joe = models.User.objects.create(username="joe")
 
-        models.Note.objects.create(author=bob, title='Note 1')
-        models.Note.objects.create(author=bob, title='Note 2')
-        models.Note.objects.create(author=joe, title='Note 3')
-        models.Note.objects.create(author=joe, title='Note 4')
+        models.Note.objects.create(author=bob, title="Note 1")
+        models.Note.objects.create(author=bob, title="Note 2")
+        models.Note.objects.create(author=joe, title="Note 3")
+        models.Note.objects.create(author=joe, title="Note 4")
 
     def get_callable(self, *args):
         # Returns the callable and callable's *args to be used for each test
@@ -73,28 +78,32 @@ class PerfTestMixin(object):
 
     def test_performance(self):
         call, args = self.get_callable(*self.django_filter_args())
-        df_time = min(repeat(
-            lambda: call(*args),
-            number=self.iterations,
-            repeat=self.repeat,
-        ))
+        df_time = min(
+            repeat(
+                lambda: call(*args),
+                number=self.iterations,
+                repeat=self.repeat,
+            )
+        )
 
         call, args = self.get_callable(*self.rest_framework_filters_args())
-        drf_time = min(repeat(
-            lambda: call(*args),
-            number=self.iterations,
-            repeat=self.repeat,
-        ))
+        drf_time = min(
+            repeat(
+                lambda: call(*args),
+                number=self.iterations,
+                repeat=self.repeat,
+            )
+        )
 
         diff = (drf_time - df_time) / df_time * 100.0
 
         if verbosity >= 2:
-            print('\n' + '-' * 32)
-            print('%s performance' % self.label)
-            print('django-filter time:\t%.4fs' % df_time)
-            print('drf-filters time:\t%.4fs' % drf_time)
-            print('performance diff:\t%+.2f%% ' % diff)
-            print('-' * 32)
+            print("\n" + "-" * 32)
+            print("%s performance" % self.label)
+            print("django-filter time:\t%.4fs" % df_time)
+            print("drf-filters time:\t%.4fs" % drf_time)
+            print("performance diff:\t%+.2f%% " % diff)
+            print("-" * 32)
 
         self.assertLess(drf_time, df_time * self.threshold)
 
@@ -102,18 +111,20 @@ class PerfTestMixin(object):
 class FilterBackendTests(PerfTestMixin, TestCase):
     # How much faster or slower is drf-filters than django-filter?
     threshold = 1.5
-    label = 'Filter Backend'
+    label = "Filter Backend"
 
     def get_callable(self, view_class):
-        view = view_class(action_map={'get': 'list'})
-        data = {'author__username': 'bob', 'title__contains': 'Note'}
-        request = factory.get('/', data=data)
+        view = view_class(action_map={"get": "list"})
+        data = {"author__username": "bob", "title__contains": "Note"}
+        request = factory.get("/", data=data)
         request = view.initialize_request(request)
         backend = view.filter_backends[0]
 
         call = backend().filter_queryset
         args = [
-            request, view.get_queryset(), view,
+            request,
+            view.get_queryset(),
+            view,
         ]
 
         return call, args
@@ -128,27 +139,28 @@ class FilterBackendTests(PerfTestMixin, TestCase):
         self.assertEqual(qs.count(), 2)
 
 
-@override_settings(ROOT_URLCONF='tests.perf.urls')
+@override_settings(ROOT_URLCONF="tests.perf.urls")
 class WSGIResponseTests(PerfTestMixin, TestCase):
     # How much does drf-filters affect the request/response cycle? This includes
     # response rendering, which provides a more practical picture of the performance
     # costs of using drf-filters.
     threshold = 1.3
-    label = 'WSGI Response'
+    label = "WSGI Response"
 
     def get_callable(self, url):
         call = self.client.get
         args = [
-            url, {'author__username': 'bob', 'title__contains': 'Note'},
+            url,
+            {"author__username": "bob", "title__contains": "Note"},
         ]
 
         return call, args
 
     def django_filter_args(self):
-        return ['/df-notes/']
+        return ["/df-notes/"]
 
     def rest_framework_filters_args(self):
-        return ['/drf-notes/']
+        return ["/drf-notes/"]
 
     def validate_result(self, response):
         self.assertEqual(response.status_code, 200, response.content)

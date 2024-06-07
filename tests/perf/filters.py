@@ -1,4 +1,3 @@
-
 from django_filters import FilterSet as DFFilterSet
 
 from rest_framework_filters import filters
@@ -12,17 +11,23 @@ class NoteFilterWithExplicitRelated(DFFilterSet):
     class Meta:
         model = Note
         fields = {
-            'title': [
-                'exact', 'contains', 'startswith', 'endswith',
-                'iexact', 'icontains', 'istartswith', 'iendswith',
+            "title": [
+                "exact",
+                "contains",
+                "startswith",
+                "endswith",
+                "iexact",
+                "icontains",
+                "istartswith",
+                "iendswith",
             ],
-            'author__username': ['exact'],
+            "author__username": ["exact"],
         }
 
 
 # drf-filters
 class UserFilterWithAll(DRFFilterSet):
-    username = filters.AutoFilter(lookups='__all__')
+    username = filters.AutoFilter(lookups="__all__")
 
     class Meta:
         model = User
@@ -30,7 +35,7 @@ class UserFilterWithAll(DRFFilterSet):
 
 
 class NoteFilterWithRelatedAll(DRFFilterSet):
-    title = filters.AutoFilter(lookups='__all__')
+    title = filters.AutoFilter(lookups="__all__")
     author = filters.RelatedFilter(UserFilterWithAll, queryset=User.objects.all())
 
     class Meta:

@@ -6,11 +6,13 @@ from django.db.models import Case, Value, When
 class PostQuerySet(models.QuerySet):
 
     def annotate_is_published(self):
-        return self.annotate(is_published=Case(
-            When(publish_date__isnull=False, then=Value(True)),
-            default=Value(False),
-            output_field=models.BooleanField(),
-        ))
+        return self.annotate(
+            is_published=Case(
+                When(publish_date__isnull=False, then=Value(True)),
+                default=Value(False),
+                output_field=models.BooleanField(),
+            )
+        )
 
 
 class Note(models.Model):
@@ -48,27 +50,27 @@ class Cover(models.Model):
 class Page(models.Model):
     title = models.CharField(max_length=100)
     content = models.TextField()
-    previous_page = models.ForeignKey('self', null=True, on_delete=models.CASCADE)
+    previous_page = models.ForeignKey("self", null=True, on_delete=models.CASCADE)
 
 
 class A(models.Model):
     title = models.CharField(max_length=100)
-    b = models.ForeignKey('B', null=True, on_delete=models.CASCADE)
+    b = models.ForeignKey("B", null=True, on_delete=models.CASCADE)
 
 
 class B(models.Model):
     name = models.CharField(max_length=100)
-    c = models.ForeignKey('C', null=True, on_delete=models.CASCADE)
+    c = models.ForeignKey("C", null=True, on_delete=models.CASCADE)
 
 
 class C(models.Model):
     title = models.CharField(max_length=100)
-    a = models.ForeignKey('A', null=True, on_delete=models.CASCADE)
+    a = models.ForeignKey("A", null=True, on_delete=models.CASCADE)
 
 
 class Person(models.Model):
     name = models.CharField(max_length=100)
-    best_friend = models.ForeignKey('self', null=True, on_delete=models.CASCADE)
+    best_friend = models.ForeignKey("self", null=True, on_delete=models.CASCADE)
 
     date_joined = models.DateField(auto_now_add=True)
     time_joined = models.TimeField(auto_now_add=True)
@@ -84,9 +86,9 @@ class Customer(models.Model):
 
 class Account(models.Model):
     TYPE_CHOICES = [
-        ('c', 'Checking'),
-        ('s', 'Savings'),
+        ("c", "Checking"),
+        ("s", "Savings"),
     ]
-    customer = models.ForeignKey(Customer, to_field='ssn', on_delete=models.CASCADE)
+    customer = models.ForeignKey(Customer, to_field="ssn", on_delete=models.CASCADE)
     type = models.CharField(max_length=1, choices=TYPE_CHOICES)
     name = models.CharField(max_length=80)

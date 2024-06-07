@@ -18,8 +18,8 @@ def lookups_for_field(model_field):
         if issubclass(lookup, Transform):
             transform = lookup(Expression(model_field))
             lookups += [
-                LOOKUP_SEP.join([expr, sub_expr]) for sub_expr
-                in lookups_for_transform(transform)
+                LOOKUP_SEP.join([expr, sub_expr])
+                for sub_expr in lookups_for_transform(transform)
             ]
 
         else:
@@ -56,8 +56,8 @@ def lookups_for_transform(transform):
 
             sub_transform = lookup(transform)
             lookups += [
-                LOOKUP_SEP.join([expr, sub_expr]) for sub_expr
-                in lookups_for_transform(sub_transform)
+                LOOKUP_SEP.join([expr, sub_expr])
+                for sub_expr in lookups_for_transform(sub_transform)
             ]
 
         else:

@@ -1,13 +1,11 @@
-
 DEBUG = True
 
 DATABASES = {
-    'default': {
-        'ENGINE': 'django.db.backends.sqlite3',
-        'NAME': 'db.sqlite3',
-
-        'TEST': {
-            'NAME': ':memory:',
+    "default": {
+        "ENGINE": "django.db.backends.sqlite3",
+        "NAME": "db.sqlite3",
+        "TEST": {
+            "NAME": ":memory:",
         },
     },
 }
@@ -15,37 +13,37 @@ DATABASES = {
 MIDDLEWARE = []
 
 INSTALLED_APPS = (
-    'django.contrib.auth',
-    'django.contrib.contenttypes',
-    'django.contrib.staticfiles',
-    'rest_framework_filters',
-    'rest_framework',
-    'django_filters',
-    'tests.testapp',
+    "django.contrib.auth",
+    "django.contrib.contenttypes",
+    "django.contrib.staticfiles",
+    "rest_framework_filters",
+    "rest_framework",
+    "django_filters",
+    "tests.testapp",
 )
 
-SECRET_KEY = 'testsecretkey'  # noqa
+SECRET_KEY = "testsecretkey"  # noqa
 
 TEMPLATES = [
     {
-        'BACKEND': 'django.template.backends.django.DjangoTemplates',
-        'DIRS': [],
-        'APP_DIRS': True,
-        'OPTIONS': {
-            'context_processors': [
-                'django.template.context_processors.debug',
-                'django.template.context_processors.request',
-                'django.contrib.auth.context_processors.auth',
-                'django.contrib.messages.context_processors.messages',
+        "BACKEND": "django.template.backends.django.DjangoTemplates",
+        "DIRS": [],
+        "APP_DIRS": True,
+        "OPTIONS": {
+            "context_processors": [
+                "django.template.context_processors.debug",
+                "django.template.context_processors.request",
+                "django.contrib.auth.context_processors.auth",
+                "django.contrib.messages.context_processors.messages",
             ],
-            'debug': True,
+            "debug": True,
         },
     },
 ]
 
 
-ROOT_URLCONF = 'tests.testapp.urls'
+ROOT_URLCONF = "tests.testapp.urls"
 
-STATIC_URL = '/static/'
+STATIC_URL = "/static/"
 
-DEFAULT_AUTO_FIELD = 'django.db.models.BigAutoField'
+DEFAULT_AUTO_FIELD = "django.db.models.BigAutoField"

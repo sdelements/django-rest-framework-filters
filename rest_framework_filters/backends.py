@@ -13,7 +13,7 @@ class RestFrameworkFilterBackend(backends.DjangoFilterBackend):
 
     @property
     def template(self):
-        return 'rest_framework_filters/form.html'
+        return "rest_framework_filters/form.html"
 
     @contextmanager
     def patch_for_rendering(self, request):
@@ -48,7 +48,7 @@ class RestFrameworkFilterBackend(backends.DjangoFilterBackend):
 
 
 class ComplexFilterBackend(RestFrameworkFilterBackend):
-    complex_filter_param = 'filters'
+    complex_filter_param = "filters"
     operators = None
     negation = True
 
@@ -70,7 +70,9 @@ class ComplexFilterBackend(RestFrameworkFilterBackend):
         # Collect the individual filtered querysets
         querystrings = [op.querystring for op in complex_ops]
         try:
-            querysets = self.get_filtered_querysets(querystrings, request, queryset, view)
+            querysets = self.get_filtered_querysets(
+                querystrings, request, queryset, view
+            )
         except ValidationError as exc:
             raise ValidationError({self.complex_filter_param: exc.detail})
 
