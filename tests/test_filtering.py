@@ -442,7 +442,7 @@ class RelatedFilterTests(TestCase):
         GET = {'author': User.objects.get(username='user2').pk}
         msg = "Expected `.get_queryset()` for related filter 'NoteFilter.author' " \
               "to return a `QuerySet`, but got `None`."
-        with self.assertRaisesMessage(AssertionError, msg):
+        with self.assertRaisesMessage(ValueError, msg):
             NoteFilter(GET, queryset=Note.objects.all())
 
     def test_relatedfilter_request_is_passed(self):
