@@ -24,7 +24,7 @@ INSTALLED_APPS = (
     'tests.testapp',
 )
 
-SECRET_KEY = 'testsecretkey'
+SECRET_KEY = 'testsecretkey'  # noqa
 
 TEMPLATES = [
     {

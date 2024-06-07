@@ -51,7 +51,7 @@ def lookups_for_transform(transform):
         if issubclass(lookup, Transform):
 
             # type match indicates recursion.
-            if type(transform) == lookup:
+            if type(transform) is lookup:
                 continue
 
             sub_transform = lookup(transform)

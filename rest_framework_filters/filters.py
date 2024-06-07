@@ -99,10 +99,12 @@ class BaseRelatedFilter:
 
     def get_queryset(self, request):
         queryset = super(BaseRelatedFilter, self).get_queryset(request)
-        assert queryset is not None, \
-            "Expected `.get_queryset()` for related filter '%s.%s' to " \
-            "return a `QuerySet`, but got `None`." \
-            % (self.parent.__class__.__name__, self.field_name)
+        if queryset is None:
+            raise ValueError(
+                "Expected `.get_queryset()` for related filter '%s.%s' to return a `QuerySet`, but got `None`."
+                % (self.parent.__class__.__name__, self.field_name)
+            )
+
         return queryset
 
 

@@ -1,7 +1,6 @@
 from contextlib import contextmanager
 
 from django.http import QueryDict
-from django_filters import compat
 from django_filters.rest_framework import backends
 from rest_framework.exceptions import ValidationError
 
