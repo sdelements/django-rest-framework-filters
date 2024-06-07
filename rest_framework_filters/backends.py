@@ -14,8 +14,6 @@ class RestFrameworkFilterBackend(backends.DjangoFilterBackend):
 
     @property
     def template(self):
-        if compat.is_crispy():
-            return 'rest_framework_filters/crispy_form.html'
         return 'rest_framework_filters/form.html'
 
     @contextmanager

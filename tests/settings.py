@@ -21,8 +21,6 @@ INSTALLED_APPS = (
     'rest_framework_filters',
     'rest_framework',
     'django_filters',
-    "crispy_forms",
-    "crispy_bootstrap3",
     'tests.testapp',
 )
 
@@ -51,5 +49,3 @@ ROOT_URLCONF = 'tests.testapp.urls'
 STATIC_URL = '/static/'
 
 DEFAULT_AUTO_FIELD = 'django.db.models.BigAutoField'
-
-CRISPY_TEMPLATE_PACK = 'bootstrap3'
