@@ -56,3 +56,6 @@ my_root_certs.crt
 .flake8
 
 conf/
+
+# Python Virtual Environment
+venv
