@@ -34,4 +34,4 @@ jobs:
       - name: Security
         run: make bandit
       - name: Testing
-        run: make tests
+        run: make test
