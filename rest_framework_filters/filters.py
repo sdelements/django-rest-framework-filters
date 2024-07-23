@@ -2,8 +2,10 @@ import warnings
 
 from django.utils.module_loading import import_string
 from django_filters.rest_framework.filters import *  # noqa
-from django_filters.rest_framework.filters import (ModelChoiceFilter,
-                                                   ModelMultipleChoiceFilter)
+from django_filters.rest_framework.filters import (
+    ModelChoiceFilter,
+    ModelMultipleChoiceFilter,
+)
 
 ALL_LOOKUPS = "__all__"
 

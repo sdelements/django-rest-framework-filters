@@ -3,12 +3,33 @@ from django_filters import FilterSet as DFFilterSet
 
 from rest_framework_filters import FilterSet, filters
 
-from .testapp.filters import (AccountFilter, CFilter, CoverFilter,
-                              CustomerFilter, NoteFilter, NoteFilterWithAlias,
-                              NoteFilterWithRelatedAlias, PageFilter,
-                              PersonFilter, PostFilter, UserFilter)
-from .testapp.models import (A, Account, B, C, Cover, Customer, Note, Page,
-                             Person, Post, Tag, User)
+from .testapp.filters import (
+    AccountFilter,
+    CFilter,
+    CoverFilter,
+    CustomerFilter,
+    NoteFilter,
+    NoteFilterWithAlias,
+    NoteFilterWithRelatedAlias,
+    PageFilter,
+    PersonFilter,
+    PostFilter,
+    UserFilter,
+)
+from .testapp.models import (
+    A,
+    Account,
+    B,
+    C,
+    Cover,
+    Customer,
+    Note,
+    Page,
+    Person,
+    Post,
+    Tag,
+    User,
+)
 
 
 class LocalTagFilter(FilterSet):

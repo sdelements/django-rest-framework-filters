@@ -6,9 +6,11 @@ from django.db.models import QuerySet
 from django.test import TestCase
 from rest_framework.serializers import ValidationError
 
-from rest_framework_filters.complex_ops import (ComplexOp,
-                                                combine_complex_queryset,
-                                                decode_complex_ops)
+from rest_framework_filters.complex_ops import (
+    ComplexOp,
+    combine_complex_queryset,
+    decode_complex_ops,
+)
 from tests.testapp import models
 
 

@@ -9,11 +9,17 @@ from rest_framework.test import APIRequestFactory
 from rest_framework.views import APIView
 
 from rest_framework_filters import FilterSet, filters
-from rest_framework_filters.filterset import (FilterSetMetaclass,
-                                              SubsetDisabledMixin)
+from rest_framework_filters.filterset import FilterSetMetaclass, SubsetDisabledMixin
 
-from .testapp.filters import (AFilter, NoteFilter, NoteFilterWithAlias,
-                              PersonFilter, PostFilter, TagFilter, UserFilter)
+from .testapp.filters import (
+    AFilter,
+    NoteFilter,
+    NoteFilterWithAlias,
+    PersonFilter,
+    PostFilter,
+    TagFilter,
+    UserFilter,
+)
 from .testapp.models import Note, Person, Post, Tag, User
 
 factory = APIRequestFactory()
