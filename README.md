@@ -27,5 +27,5 @@ Changes made in this fork:
 - Upgraded to use pyproject.toml
 - Use github actions over travis-ci
 - Python 3.12 compatibilty
-- Django 5.0 compatibilty
+- Django >4.2,<5.1 compatibility
 - Removed crispy-forms integration
