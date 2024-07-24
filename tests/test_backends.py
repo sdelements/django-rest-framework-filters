@@ -229,7 +229,9 @@ class BackendRenderingTests(RenderMixin, APITestCase):
         class RelatedViewSet(views.NoteViewSet):
             filterset_class = NoteFilter
 
-        assert_html_options = list(map(lambda aria: f"""
+        assert_html_options = list(
+            map(
+                lambda aria: f"""
         <h2>Field filters</h2>
         <form class="form" action="" method="get">
             <ul class="errorlist">
@@ -263,7 +265,10 @@ class BackendRenderingTests(RenderMixin, APITestCase):
 
             <button type="submit" class="btn btn-primary">Submit</button>
         </form>
-        """ , ['', 'aria-invalid="true"']))
+        """,
+                ["", 'aria-invalid="true"'],
+            )
+        )
 
         # Django >5.0 adds aria-invalid="true", but want old Django version to pass as well
         if Version(django.__version__) < Version("5.0"):
