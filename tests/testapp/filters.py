@@ -4,8 +4,21 @@ from rest_framework_filters import filters
 from rest_framework_filters.filters import AutoFilter, RelatedFilter
 from rest_framework_filters.filterset import FilterSet
 
-from .models import (A, Account, B, Blog, C, Cover, Customer, Note, Page,
-                     Person, Post, Tag, User)
+from .models import (
+    A,
+    Account,
+    B,
+    Blog,
+    C,
+    Cover,
+    Customer,
+    Note,
+    Page,
+    Person,
+    Post,
+    Tag,
+    User,
+)
 
 
 class DFUserFilter(django_filters.FilterSet):

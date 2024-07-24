@@ -1,7 +1,7 @@
 lint:
-	poetry run black .
-	poetry run isort .
-	poetry run flake8 . --extend-ignore=D,E501,W601 --extend-exclude=docs/,**/migrations/*,**/south_migrations/*,tests/ --statistics --count
+	poetry run black --check .
+	poetry run isort --check-only .
+	poetry run flake8 . --extend-ignore=D,E501,W601 --extend-exclude=docs/,tests/ --statistics --count
 
 bandit:
 	poetry run bandit -c pyproject.toml -r .

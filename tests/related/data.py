@@ -37,7 +37,8 @@ class RelationshipData:
         cls.postD(b)
 
         b = Blog.objects.create(pk=5, name="Blog AB")
-        cls.postA(b), cls.postB(b)
+        cls.postA(b)
+        cls.postB(b)
 
         b = Blog.objects.create(pk=6, name="Blog AC")
         cls.postA(b), cls.postC(b)
