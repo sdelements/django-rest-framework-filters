@@ -1,7 +1,9 @@
 from urllib.parse import quote, urlencode
 
+import django
 import django_filters
 from django.test import modify_settings
+from packaging.version import Version
 from rest_framework import status
 from rest_framework.test import APIRequestFactory, APITestCase
 
@@ -227,10 +229,9 @@ class BackendRenderingTests(RenderMixin, APITestCase):
         class RelatedViewSet(views.NoteViewSet):
             filterset_class = NoteFilter
 
-        context = {"author": "invalid", "author__last_login": "invalid"}
-        self.assertHTMLEqual(
-            self.render(RelatedViewSet, context),
-            """
+        assert_html_options = list(
+            map(
+                lambda aria: f"""
         <h2>Field filters</h2>
         <form class="form" action="" method="get">
             <ul class="errorlist">
@@ -241,7 +242,7 @@ class BackendRenderingTests(RenderMixin, APITestCase):
             </ul>
             <p>
                 <label for="id_author">Writer:</label>
-                <select id="id_author" name="author">
+                <select {aria} id="id_author" name="author">
                     <option value="">---------</option>
                 </select>
             </p>
@@ -255,7 +256,7 @@ class BackendRenderingTests(RenderMixin, APITestCase):
                 </ul>
                 <p>
                     <label for="id_author__last_login">Last login:</label>
-                    <input id="id_author__last_login"
+                    <input {aria} id="id_author__last_login"
                            name="author__last_login"
                            type="text"
                            value="invalid" />
@@ -265,6 +266,20 @@ class BackendRenderingTests(RenderMixin, APITestCase):
             <button type="submit" class="btn btn-primary">Submit</button>
         </form>
         """,
+                ["", 'aria-invalid="true"'],
+            )
+        )
+
+        # Django >5.0 adds aria-invalid="true", but want old Django version to pass as well
+        if Version(django.__version__) < Version("5.0"):
+            assert_html = assert_html_options[0]
+        else:
+            assert_html = assert_html_options[1]
+
+        context = {"author": "invalid", "author__last_login": "invalid"}
+        self.assertHTMLEqual(
+            self.render(RelatedViewSet, context),
+            assert_html,
         )
 
     def test_rendering_doesnt_affect_filterset_classes(self):
