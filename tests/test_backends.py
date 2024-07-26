@@ -1,9 +1,9 @@
 from urllib.parse import quote, urlencode
-from packaging.version import Version
 
-import django_filters
 import django
+import django_filters
 from django.test import modify_settings
+from packaging.version import Version
 from rest_framework import status
 from rest_framework.test import APIRequestFactory, APITestCase
 
