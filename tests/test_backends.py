@@ -229,52 +229,60 @@ class BackendRenderingTests(RenderMixin, APITestCase):
         class RelatedViewSet(views.NoteViewSet):
             filterset_class = NoteFilter
 
-        assert_html_options = list(
-            map(
-                lambda aria: f"""
-        <h2>Field filters</h2>
-        <form class="form" action="" method="get">
-            <ul class="errorlist">
-                <li>
-                    Select a valid choice. That choice
-                    is not one of the available choices.
-                </li>
-            </ul>
-            <p>
-                <label for="id_author">Writer:</label>
-                <select {aria} id="id_author" name="author">
-                    <option value="">---------</option>
-                </select>
-            </p>
+        # Various attributes were added in the 5.x versions
+        # for accessibility, so we define version specific
+        # attributes for <5.0, 5.0-5.1, and 5.2+
+        if Version(django.__version__) < Version("5.0"):
+            version_specific_attributes = {
+                "field_id": "",
+                "aria": "",
+            }
+        elif Version(django.__version__) < Version("5.2"):
+            version_specific_attributes = {
+                "field_id": "",
+                "aria": 'aria-invalid="true"',
+            }
+        else:  # 5.2+
+            version_specific_attributes = {
+                "field_id": "id={field}_error",
+                "aria": 'aria-describedby="{field}_error" aria-invalid="true"',
+            }
 
-
-            <fieldset>
-                <legend>Writer</legend>
-
-                <ul class="errorlist">
-                    <li>Enter a valid date.</li>
+        assert_html = f"""
+            <h2>Field filters</h2>
+            <form class="form" action="" method="get">
+                <ul class="errorlist" {version_specific_attributes["field_id"].format(field="id_author")}>
+                    <li>
+                        Select a valid choice. That choice
+                        is not one of the available choices.
+                    </li>
                 </ul>
                 <p>
-                    <label for="id_author__last_login">Last login:</label>
-                    <input {aria} id="id_author__last_login"
-                           name="author__last_login"
-                           type="text"
-                           value="invalid" />
+                    <label for="id_author">Writer:</label>
+                    <select {version_specific_attributes["aria"].format(field="id_author")} id="id_author" name="author">
+                        <option value="">---------</option>
+                    </select>
                 </p>
-            </fieldset>
 
-            <button type="submit" class="btn btn-primary">Submit</button>
-        </form>
-        """,
-                ["", 'aria-invalid="true"'],
-            )
-        )
 
-        # Django >5.0 adds aria-invalid="true", but want old Django version to pass as well
-        if Version(django.__version__) < Version("5.0"):
-            assert_html = assert_html_options[0]
-        else:
-            assert_html = assert_html_options[1]
+                <fieldset>
+                    <legend>Writer</legend>
+
+                    <ul class="errorlist" {version_specific_attributes["field_id"].format(field="id_author__last_login")}>
+                        <li>Enter a valid date.</li>
+                    </ul>
+                    <p>
+                        <label for="id_author__last_login">Last login:</label>
+                        <input {version_specific_attributes["aria"].format(field="id_author__last_login")} id="id_author__last_login"
+                               name="author__last_login"
+                               type="text"
+                               value="invalid" />
+                    </p>
+                </fieldset>
+
+                <button type="submit" class="btn btn-primary">Submit</button>
+            </form>
+        """
 
         context = {"author": "invalid", "author__last_login": "invalid"}
         self.assertHTMLEqual(
