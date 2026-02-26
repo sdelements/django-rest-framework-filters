@@ -39,8 +39,8 @@ exclude = [
 
 [tool.poetry.dependencies]
 python = "~3.12"
-django = ">=4.2,<5.1"
-django-filter = "^24.2"
+django = ">=4.2,<6.0"
+django-filter = "25.1"
 djangorestframework = "^3.15"
 
 [tool.poetry.dev-dependencies]
