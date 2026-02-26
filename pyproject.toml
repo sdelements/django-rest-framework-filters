@@ -1,6 +1,6 @@
 [tool.poetry]
 name = "djangorestframework-filters"
-version = "1.0.0"
+version = "1.2.0"
 homepage = "https://github.com/sdelements/django-rest-framework-filters"
 description = "Makes it easy to filter across relationships"
 authors = ["Security Compass <contact@securitycompass.com>"]
